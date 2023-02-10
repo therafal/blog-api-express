@@ -21,7 +21,47 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
+    req.prisma = prisma;
 
+    if (req.headers.authorization) {
+        const token = req.headers.authorization.split(" ")[1];
+        const type = req.headers.authorization.split(" ")[0];
+
+        req.token = token;
+        req.tokenType = type;
+
+        if (type === "Bearer") {
+            const tokens = await prisma.tokens.findMany({
+                where: {
+                    token: token
+                }
+            });
+
+            if (tokens.length > 0) {
+                const user = await prisma.users.findUnique({
+                    where: {
+                        id: tokens[0].user_id
+                    }
+                });
+
+                if (user) {
+                    req.user = user;
+                    next();
+                } else {
+                    return res.status(401).send("Unauthorized");
+                }
+            } else {
+                return res.status(401).send("Unauthorized");
+            }
+        } else {
+            return res.status(401).send("Unauthorized");
+        }
+    } else next();
+});
+
+app.get("/", (req: Request, res: Response) => {
+    res.status(418);
+    res.send("I'm a teapot");
 });
 
 fs.readdirSync(__dirname + "/routes").forEach((version: string) => {
