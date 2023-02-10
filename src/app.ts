@@ -60,8 +60,7 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
 });
 
 app.get("/", (req: Request, res: Response) => {
-    res.status(418);
-    res.send("I'm a teapot");
+    res.status(303).send("See other");
 });
 
 fs.readdirSync(__dirname + "/routes").forEach((version: string) => {
