@@ -153,9 +153,16 @@ router.delete("/images/me/:id", async (req: Request, res: Response, next: NextFu
           }
       });
 
-      if (!image) return res.status(404).send("Image not found");
+        if (!image) return res.status(404).send("Image not found");
 
-      if (image.user_id !== req.user.id) return res.status(403).send("Forbidden");
+        if (image.user_id !== req.user.id) return res.status(403).send("Forbidden");
+
+        fs.unlink(path.resolve(DIR, image.name), (err) => {
+            if (err) {
+                console.error(err)
+                return res.status(500).send("Could not delete image");
+            }
+        });
 
       await req.prisma.images.delete({
           where: {
@@ -185,6 +192,26 @@ router.delete("/images/:id", async (req: Request, res: Response, next: NextFunct
 
       if (!permissions) return res.status(403).send("Forbidden");
       if (!permissions.permissions.includes("admin")) return res.status(403).send("Forbidden");
+
+        const image = await req.prisma.images.findUnique({
+            where: {
+                id: Number(req.params.id),
+            },
+            select: {
+                id: true,
+                name: true,
+                user_id: true,
+            }
+        });
+
+        if (!image) return res.status(404).send("Image not found");
+
+        fs.unlink(path.resolve(DIR, image.name), (err) => {
+            if (err) {
+                console.error(err)
+                return res.status(500).send("Could not delete image");
+            }
+        });
 
       await req.prisma.images.delete({
           where: {
