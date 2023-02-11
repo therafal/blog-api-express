@@ -34,13 +34,25 @@ router.post("/auth/login", async (req: Request, res: Response) => {
         }
     });
 
-    res.send({
+    res.status(200).send({
         token: token,
         user: {
             id: user.id,
             username: user.username
         }
     });
+});
+
+router.delete("/auth/sessions", async (req: Request, res: Response) => {
+    if (!req.user) return res.status(401).send("Unauthorized");
+
+    await req.prisma.tokens.deleteMany({
+        where: {
+            user_id: req.user.id
+        }
+    });
+
+    res.status(204).send();
 });
 
 module.exports = router;
