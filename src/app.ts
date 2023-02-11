@@ -11,7 +11,6 @@ const prisma: PrismaClient = new PrismaClient();
 
 const app: Express = express();
 
-
 app.use(morgan("combined"));
 app.use(bodyParser.json({ limit: "150mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "150mb" }));

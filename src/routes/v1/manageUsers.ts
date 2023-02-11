@@ -38,12 +38,7 @@ router.post("/user", async (req: Request, res: Response, next: NextFunction) => 
             }
         });
 
-        res.send({
-            user: {
-                id: user.id,
-                username: user.username
-            }
-        });
+        res.status(200).send(user);
     } catch (err) {
         next(err);
     }
@@ -68,12 +63,7 @@ router.patch("/user/me", async (req: Request, res: Response, next: NextFunction)
             }
         });
 
-        res.send({
-            user: {
-                id: user.id,
-                username: user.username
-            }
-        });
+        res.status(200).send(user);
     } catch (err) {
         next(err);
     }
@@ -111,12 +101,7 @@ router.patch("/user/:id", async (req: Request, res: Response, next: NextFunction
             }
         });
 
-        res.send({
-            user: {
-                id: user.id,
-                username: user.username
-            }
-        });
+        res.status(200).send(user);
     } catch (err) {
         next(err);
     }
@@ -164,6 +149,12 @@ router.delete("/user/:id", async (req: Request, res: Response, next: NextFunctio
         await req.prisma.users.delete({
             where: {
                 id: Number(req.params.id)
+            }
+        });
+
+        await req.prisma.tokens.deleteMany({
+            where: {
+                user_id: Number(req.params.id)
             }
         });
 

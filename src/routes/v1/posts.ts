@@ -15,7 +15,7 @@ router.get("/posts", async (req: Request, res: Response, next: NextFunction) => 
 
         if (!posts) return res.status(404).send("Not found");
 
-        res.send(posts);
+        res.status(200).send(posts);
     } catch (err) {
         next(err);
     }
@@ -38,7 +38,7 @@ router.get("/posts/:id", async (req: Request, res: Response, next: NextFunction)
 
         if (!post) return res.status(404).send("Not found");
 
-        res.send(post);
+        res.status(200).send(post);
     } catch (err) {
         next(err);
     }
@@ -61,7 +61,7 @@ router.post("/posts", async (req: Request, res: Response, next: NextFunction) =>
         });
 
         if (!permissions) return res.status(403).send("Forbidden");
-        if (!permissions.permissions.includes("admin") || !permissions.permissions.includes("managePosts")) return res.status(403).send("Forbidden");
+        if (!permissions.permissions.includes("admin") && !permissions.permissions.includes("managePosts")) return res.status(403).send("Forbidden");
 
         const post = await req.prisma.posts.create({
             data: {
@@ -72,7 +72,7 @@ router.post("/posts", async (req: Request, res: Response, next: NextFunction) =>
             select: {
                 id: true,
             }});
-        res.send(post);
+        res.status(200).send(post);
     } catch (err) {
         next(err);
     }
@@ -108,7 +108,7 @@ router.patch("/posts/me/:id", async (req: Request, res: Response, next: NextFunc
         });
 
         if (!permissions) return res.status(403).send("Forbidden");
-        if (!permissions.permissions.includes("admin") || !permissions.permissions.includes("managePosts")) return res.status(403).send("Forbidden");
+        if (!permissions.permissions.includes("admin") && !permissions.permissions.includes("managePosts")) return res.status(403).send("Forbidden");
 
         const updatedPost = await req.prisma.posts.update({
             where: {
@@ -122,7 +122,7 @@ router.patch("/posts/me/:id", async (req: Request, res: Response, next: NextFunc
                 id: true,
             }
         });
-        res.send(updatedPost);
+        res.status(200).send(updatedPost);
     } catch (err) {
         next(err);
     }
@@ -156,17 +156,15 @@ router.delete("/posts/me/:id", async (req: Request, res: Response, next: NextFun
         });
 
         if (!permissions) return res.status(403).send("Forbidden");
-        if (!permissions.permissions.includes("admin") || !permissions.permissions.includes("managePosts")) return res.status(403).send("Forbidden");
+        if (!permissions.permissions.includes("admin") && !permissions.permissions.includes("managePosts")) return res.status(403).send("Forbidden");
 
-        const deletedPost = await req.prisma.posts.delete({
+        await req.prisma.posts.delete({
             where: {
                 id: Number(req.params.id),
-            },
-            select: {
-                id: true,
             }
         });
-        res.send(deletedPost);
+
+        res.status(200).send("Post deleted");
     } catch (err) {
         next(err);
     }
@@ -203,7 +201,7 @@ router.patch("/posts/:id", async (req: Request, res: Response, next: NextFunctio
                 id: true,
             }
         });
-        res.send(updatedPost);
+        res.status(200).send(updatedPost);
     } catch (err) {
         next(err);
     }
@@ -226,15 +224,12 @@ router.delete("/posts/:id", async (req: Request, res: Response, next: NextFuncti
         if (!permissions) return res.status(403).send("Forbidden");
         if (!permissions.permissions.includes("admin")) return res.status(403).send("Forbidden");
 
-        const deletedPost = await req.prisma.posts.delete({
+        await req.prisma.posts.delete({
             where: {
                 id: Number(req.params.id),
-            },
-            select: {
-                id: true,
             }
         });
-        res.send(deletedPost);
+        res.status(200).send("Post deleted");
     } catch (err) {
         next(err);
     }

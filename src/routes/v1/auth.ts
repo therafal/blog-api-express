@@ -8,6 +8,7 @@ router.post("/auth/login", async (req: Request, res: Response) => {
     if (req.user) return res.status(400).send("Already logged in");
 
     if (!req.body.username || !req.body.password) return res.status(400).send("Missing username or password");
+    console.log(req.body.username, req.body.password);
 
     const user = await req.prisma.users.findFirst({
         where: {
@@ -52,7 +53,7 @@ router.delete("/auth/sessions", async (req: Request, res: Response) => {
         }
     });
 
-    res.status(200).send("Logged out");
+    res.status(200).send("Sessions deleted");
 });
 
 module.exports = router;
