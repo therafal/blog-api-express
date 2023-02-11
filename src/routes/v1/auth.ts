@@ -52,7 +52,7 @@ router.delete("/auth/sessions", async (req: Request, res: Response) => {
         }
     });
 
-    res.status(204).send();
+    res.status(200).send("Logged out");
 });
 
 module.exports = router;
