@@ -1,11 +1,11 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "TheRafal's webpage server",
+  "description": "Blog API server",
   "main": "index.js",
   "author": "TheRafal",
-  "license": "None",
-  "private": true,
+  "license": "GPL-3.0",
+  "private": false,
   "dependencies": {
     "@prisma/client": "^4.11.0-dev.9",
     "argon2": "^0.30.3",
@@ -37,7 +37,7 @@
     "setup": "npm install && npm run build && npm run createAdmin",
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
+    "start:dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
     "createAdmin": "node dist/createAdmin.js",
     "prepare": "husky install"
   },
