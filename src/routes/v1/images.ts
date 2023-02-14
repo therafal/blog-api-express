@@ -100,7 +100,7 @@ router.post(
         return res.status(500).send("File size cannot be larger than 5MB!");
       res
         .status(500)
-        .send(`Could not upload the file: ${req.file.originalname}. ${err}`);
+        .send(`Could not upload the file: ${req.file.originalname}`);
       next(err);
     }
   }
