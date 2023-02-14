@@ -16,4 +16,4 @@ This is the backend for mine personal website with the blog, but the API can be 
 3. Run `npm run setup` to install dependencies, build project and create user with admin permissions.
 4. Run `npm run start:dev` to start the project in development mode.
 
-This work is licensed under a <a href"https://www.gnu.org/licenses/gpl-3.0.en.html">GNU General Public License</a> license. See LICENSE.md.
+This work is licensed under a [GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.en.html). See LICENSE.md.
