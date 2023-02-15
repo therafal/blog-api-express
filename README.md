@@ -7,7 +7,7 @@ This is the backend for mine personal website with the blog, but the API can be 
 ## Pre-requisites
 
 - Node.js v18
-- PostgerSQL (or any SQL database that is supported by Prisma)
+- PostgreSQL (or any SQL database that is supported by Prisma)
 
 ## Setting up the Backend
 
@@ -17,3 +17,5 @@ This is the backend for mine personal website with the blog, but the API can be 
 4. Run `npm run start:dev` to start the project in development mode.
 
 This work is licensed under a [GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.en.html). See LICENSE.md.
+
+[![forthebadge](https://forthebadge.com/images/badges/not-a-bug-a-feature.svg)](https://forthebadge.com)
