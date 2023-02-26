@@ -73,20 +73,9 @@ router.post(
       if (!req.body.title) return res.status(400).send("Missing title");
       if (!req.body.content) return res.status(400).send("Missing content");
 
-      const permissions = await req.prisma.users.findUnique({
-        where: {
-          id: req.user.id,
-        },
-        select: {
-          id: true,
-          permissions: true,
-        },
-      });
-
-      if (!permissions) return res.status(403).send("Forbidden");
       if (
-        !permissions.permissions.includes("admin") &&
-        !permissions.permissions.includes("managePosts")
+        !req.user.permissions.includes("admin") &&
+        !req.user.permissions.includes("managePosts")
       )
         return res.status(403).send("Forbidden");
 
@@ -129,20 +118,9 @@ router.patch(
       if (post.author_id !== req.user.id)
         return res.status(403).send("Forbidden");
 
-      const permissions = await req.prisma.users.findUnique({
-        where: {
-          id: req.user.id,
-        },
-        select: {
-          id: true,
-          permissions: true,
-        },
-      });
-
-      if (!permissions) return res.status(403).send("Forbidden");
       if (
-        !permissions.permissions.includes("admin") &&
-        !permissions.permissions.includes("managePosts")
+        !req.user.permissions.includes("admin") &&
+        !req.user.permissions.includes("managePosts")
       )
         return res.status(403).send("Forbidden");
 
@@ -185,20 +163,9 @@ router.delete(
       if (post.author_id !== req.user.id)
         return res.status(403).send("Forbidden");
 
-      const permissions = await req.prisma.users.findUnique({
-        where: {
-          id: req.user.id,
-        },
-        select: {
-          id: true,
-          permissions: true,
-        },
-      });
-
-      if (!permissions) return res.status(403).send("Forbidden");
       if (
-        !permissions.permissions.includes("admin") &&
-        !permissions.permissions.includes("managePosts")
+        !req.user.permissions.includes("admin") &&
+        !req.user.permissions.includes("managePosts")
       )
         return res.status(403).send("Forbidden");
 
@@ -223,19 +190,8 @@ router.patch(
       if (!req.body.title) return res.status(400).send("Missing title");
       if (!req.body.content) return res.status(400).send("Missing content");
 
-      const permissions = await req.prisma.users.findUnique({
-        where: {
-          id: req.user.id,
-        },
-        select: {
-          id: true,
-          permissions: true,
-        },
-      });
-
-      if (!permissions) return res.status(403).send("Forbidden");
-      if (!permissions.permissions.includes("admin"))
-        return res.status(403).send("Forbidden");
+      if (!req.user.permissions.includes("admin"))
+        res.status(403).send("Forbidden");
 
       const updatedPost = await req.prisma.posts.update({
         where: {
@@ -262,19 +218,8 @@ router.delete(
     try {
       if (!req.user) return res.status(401).send("Unauthorized");
 
-      const permissions = await req.prisma.users.findUnique({
-        where: {
-          id: req.user.id,
-        },
-        select: {
-          id: true,
-          permissions: true,
-        },
-      });
-
-      if (!permissions) return res.status(403).send("Forbidden");
-      if (!permissions.permissions.includes("admin"))
-        return res.status(403).send("Forbidden");
+      if (!req.user.permissions.includes("admin"))
+        res.status(403).send("Forbidden");
 
       await req.prisma.posts.delete({
         where: {

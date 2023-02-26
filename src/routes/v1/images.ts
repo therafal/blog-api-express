@@ -53,20 +53,9 @@ router.post(
       if (!req.user) return res.status(401).send("Unauthorized");
       if (!req.file) return res.status(400).send("Missing file");
 
-      const permissions = await req.prisma.users.findUnique({
-        where: {
-          id: req.user.id,
-        },
-        select: {
-          id: true,
-          permissions: true,
-        },
-      });
-
-      if (!permissions) return res.status(403).send("Forbidden");
       if (
-        !permissions.permissions.includes("admin") &&
-        !permissions.permissions.includes("uploadImages")
+        !req.user.permissions.includes("admin") &&
+        !req.user.permissions.includes("uploadImages")
       )
         return res.status(403).send("Forbidden");
 
@@ -202,18 +191,7 @@ router.delete(
     try {
       if (!req.user) return res.status(401).send("Unauthorized");
 
-      const permissions = await req.prisma.users.findUnique({
-        where: {
-          id: req.user.id,
-        },
-        select: {
-          id: true,
-          permissions: true,
-        },
-      });
-
-      if (!permissions) return res.status(403).send("Forbidden");
-      if (!permissions.permissions.includes("admin"))
+      if (!req.user.permissions.includes("admin"))
         return res.status(403).send("Forbidden");
 
       const image = await req.prisma.images.findUnique({
