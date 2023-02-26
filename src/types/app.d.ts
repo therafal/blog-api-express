@@ -6,3 +6,7 @@ declare namespace Express {
         user: any;
     }
 }
+
+interface BigInt {
+  toJSON: () => string;
+}
